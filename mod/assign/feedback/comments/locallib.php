@@ -273,7 +273,9 @@ class assign_feedback_comments extends assign_feedback_plugin {
         if ($defaultcommentinline === false) {
             $defaultcommentinline = get_config('assignfeedback_comments', 'inline');
         }
-        $mform->addElement('selectyesno', 'assignfeedback_comments_commentinline', get_string('commentinline', 'assignfeedback_comments'));
+        $mform->addElement('selectyesno',
+                           'assignfeedback_comments_commentinline',
+                           get_string('commentinline', 'assignfeedback_comments'));
         $mform->addHelpButton('assignfeedback_comments_commentinline', 'commentinline', 'assignfeedback_comments');
         $mform->setDefault('assignfeedback_comments_commentinline', $defaultcommentinline);
         // Disable comment online if comment feedback plugin is disabled.
