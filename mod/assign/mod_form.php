@@ -202,6 +202,7 @@ class mod_assign_mod_form extends moodleform_mod {
                                                      get_string('changegradewarning', 'mod_assign')));
             $mform->insertElementBefore($noscriptwarning, 'grade');
         }
+
     }
 
     /**
