@@ -69,10 +69,15 @@ class external_service_form extends moodleform {
                 get_string('restrictedusers', 'webservice'));
         $mform->addHelpButton('restrictedusers', 'restrictedusers', 'webservice');
 
-        //can users download files
+        // Can users download files?
         $mform->addElement('advcheckbox', 'downloadfiles', get_string('downloadfiles', 'webservice'));
         $mform->setAdvanced('downloadfiles');
         $mform->addHelpButton('downloadfiles', 'downloadfiles', 'webservice');
+
+        // Can users upload files?
+        $mform->addElement('advcheckbox', 'uploadfiles', get_string('uploadfiles', 'webservice'));
+        $mform->setAdvanced('uploadfiles');
+        $mform->addHelpButton('uploadfiles', 'uploadfiles', 'webservice');
 
         /// needed to select automatically the 'No required capability" option
         $currentcapabilityexist = false;
