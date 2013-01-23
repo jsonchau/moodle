@@ -887,7 +887,6 @@ abstract class moodleform_mod extends moodleform {
                 } else {
                     $mform->setDefault($name, $settings->$name);
                 }
-                $mform->setDefault($name, $settings->$name);
                 $advancedsetting = $name . '_adv';
                 if (!empty($settings->$advancedsetting)) {
                     $mform->setAdvanced($name);

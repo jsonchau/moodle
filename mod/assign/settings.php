@@ -79,10 +79,97 @@ if ($ADMIN->fulltree) {
                                                     $description,
                                                     $default));
 
+    $name = new lang_string('defaultsettings', 'mod_assign');
+    $description = new lang_string('defaultsettings_help', 'mod_assign');
+    $settings->add(new admin_setting_heading('defaultsettings', $name, $description));
+
+    $name = new lang_string('alwaysshowdescription', 'mod_assign');
+    $description = new lang_string('alwaysshowdescription_help', 'mod_assign');
+    $setting = new admin_setting_configcheckbox('assign/alwaysshowdescription',
+                                                    $name,
+                                                    $description,
+                                                    1);
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('allowsubmissionsfromdate', 'mod_assign');
+    $description = new lang_string('allowsubmissionsfromdate_adminhelp', 'mod_assign');
+    $setting = new admin_setting_configduration('assign/allowsubmissionsfromdate',
+                                                    $name,
+                                                    $description,
+                                                    '');
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('submissiondrafts', 'mod_assign');
+    $description = new lang_string('submissiondrafts_help', 'mod_assign');
+    $setting = new admin_setting_configcheckbox('assign/submissiondrafts',
+                                                    $name,
+                                                    $description,
+                                                    0);
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
     $name = new lang_string('requiresubmissionstatement', 'mod_assign');
     $description = new lang_string('requiresubmissionstatement_help', 'mod_assign');
     $settings->add(new admin_setting_configcheckbox('assign/requiresubmissionstatement',
                                                     $name,
                                                     $description,
                                                     0));
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('sendnotifications', 'mod_assign');
+    $description = new lang_string('sendnotifications_help', 'mod_assign');
+    $setting = new admin_setting_configcheckbox('assign/sendnotifications',
+                                                    $name,
+                                                    $description,
+                                                    0);
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('sendlatenotifications', 'mod_assign');
+    $description = new lang_string('sendlatenotifications_help', 'mod_assign');
+    $setting = new admin_setting_configcheckbox('assign/sendlatenotifications',
+                                                    $name,
+                                                    $description,
+                                                    0);
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('teamsubmission', 'mod_assign');
+    $description = new lang_string('teamsubmission_help', 'mod_assign');
+    $setting = new admin_setting_configcheckbox('assign/teamsubmission',
+                                                    $name,
+                                                    $description,
+                                                    0);
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('requireallteammemberssubmit', 'mod_assign');
+    $description = new lang_string('requireallteammemberssubmit_help', 'mod_assign');
+    $setting = new admin_setting_configcheckbox('assign/requireallteammemberssubmit',
+                                                    $name,
+                                                    $description,
+                                                    0);
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('blindmarking', 'mod_assign');
+    $description = new lang_string('blindmarking_help', 'mod_assign');
+    $setting = new admin_setting_configcheckbox('assign/blindmarking',
+                                                    $name,
+                                                    $description,
+                                                    0);
+    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $settings->add($setting);
 }

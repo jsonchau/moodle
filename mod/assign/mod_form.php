@@ -79,7 +79,7 @@ class mod_assign_mod_form extends moodleform_mod {
         $options = array('optional'=>true);
         $mform->addElement('date_time_selector', 'allowsubmissionsfromdate', $name, $options);
         $mform->addHelpButton('allowsubmissionsfromdate', 'allowsubmissionsfromdate', 'assign');
-        $mform->setDefault('allowsubmissionsfromdate', time());
+        //$mform->setDefault('allowsubmissionsfromdate', time());
 
         $name = get_string('duedate', 'assign');
         $mform->addElement('date_time_selector', 'duedate', $name, array('optional'=>true));
@@ -195,6 +195,7 @@ class mod_assign_mod_form extends moodleform_mod {
             $mform->insertElementBefore($noscriptwarning, 'grade');
         }
 
+        $this->apply_admin_defaults();
     }
 
     /**
