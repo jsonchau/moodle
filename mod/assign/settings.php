@@ -89,18 +89,41 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     1);
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('allowsubmissionsfromdate', 'mod_assign');
-    $description = new lang_string('allowsubmissionsfromdate_adminhelp', 'mod_assign');
+    $description = new lang_string('allowsubmissionsfromdate_help', 'mod_assign');
     $setting = new admin_setting_configduration('assign/allowsubmissionsfromdate',
                                                     $name,
                                                     $description,
-                                                    '');
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+                                                    0);
+    $setting->set_enabled_flag_options(admin_setting_flag::ENABLED, true);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('duedate', 'mod_assign');
+    $description = new lang_string('duedate_help', 'mod_assign');
+    $setting = new admin_setting_configduration('assign/duedate',
+                                                    $name,
+                                                    $description,
+                                                    604800);
+    $setting->set_enabled_flag_options(admin_setting_flag::ENABLED, true);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
+    $settings->add($setting);
+
+    $name = new lang_string('cutoffdate', 'mod_assign');
+    $description = new lang_string('cutoffdate_help', 'mod_assign');
+    $setting = new admin_setting_configduration('assign/cutoffdate',
+                                                    $name,
+                                                    $description,
+                                                    1209600);
+    $setting->set_enabled_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('submissiondrafts', 'mod_assign');
@@ -109,8 +132,8 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     0);
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('requiresubmissionstatement', 'mod_assign');
@@ -119,8 +142,8 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     0));
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('sendnotifications', 'mod_assign');
@@ -129,8 +152,8 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     0);
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('sendlatenotifications', 'mod_assign');
@@ -139,8 +162,8 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     0);
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('teamsubmission', 'mod_assign');
@@ -149,8 +172,8 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     0);
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('requireallteammemberssubmit', 'mod_assign');
@@ -159,8 +182,8 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     0);
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 
     $name = new lang_string('blindmarking', 'mod_assign');
@@ -169,7 +192,7 @@ if ($ADMIN->fulltree) {
                                                     $name,
                                                     $description,
                                                     0);
-    $setting->set_advanced_checkbox_options(admin_setting_checkbox::ENABLED, false);
-    $setting->set_locked_checkbox_options(admin_setting_checkbox::ENABLED, false);
+    $setting->set_advanced_flag_options(admin_setting_flag::ENABLED, false);
+    $setting->set_locked_flag_options(admin_setting_flag::ENABLED, false);
     $settings->add($setting);
 }
