@@ -2729,32 +2729,6 @@ class assign {
     }
 
     /**
-     * Prepare for a save_submission call from a webservice.
-     * This function loads the data about a users current submission
-     * and prepares any required draft file areas so a webservice can
-     * call save_submission to update a submission and all of the
-     * current submission plugins.
-     *
-     * @return stdClass $data The prepared form submission data.
-     */
-    public function prepare_submission() {
-        global $CFG;
-
-        $o = '';
-        require_once($CFG->dirroot . '/mod/assign/submission_form.php');
-        // Need submit permission to submit an assignment.
-        require_capability('mod/assign:submit', $this->context);
-
-        if (!$this->submissions_open()) {
-            return false;
-        }
-        $data = new stdClass();
-        $mform = new mod_assign_submission_form(null, array($this, $data));
-
-        return (array) $mform->get_data();
-    }
-
-    /**
      * View edit submissions page.
      *
      * @param moodleform $mform
