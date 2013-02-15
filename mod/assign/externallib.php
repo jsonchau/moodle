@@ -40,7 +40,8 @@ class mod_assign_external extends external_api {
             'couldnotrevealidentities'=>'Could not reveal identities.',
             'couldnotgrantextensions'=>'Could not grant submission date extensions.',
             'couldnotrevert'=>'Could not revert submission to draft.',
-            'invalidparameters'=>'Invalid parameters.'
+            'invalidparameters'=>'Invalid parameters.',
+            'couldnotsavesubmission'=>'Could not save submission.'
         );
 
         $message = $warningmessages[$warningcode];
@@ -1075,4 +1076,85 @@ class mod_assign_external extends external_api {
         );
     }
 
+    /**
+     * Describes the parameters for save_submission
+     * @return external_external_function_parameters
+     * @since  Moodle 2.5
+     */
+    public static function save_submission_parameters() {
+        global $CFG;
+        require_once("$CFG->dirroot/mod/assign/locallib.php");
+        $instance = new assign(null, null, null);
+        $pluginsubmissionparams = array();
+
+        foreach ($instance->get_submission_plugins() as $plugin) {
+            $pluginparams = $plugin->get_external_parameters();
+            if (!empty($pluginparams)) {
+                $pluginsubmissionparams[$plugin->get_type()] = $pluginparams;
+            }
+        }
+
+        return new external_function_parameters(
+            array(
+                'assignmentid' => new external_value(PARAM_INT, 'The assignment id to operate on'),
+                'plugindata' => new external_single_structure(
+                    $pluginsubmissionparams
+                )
+            )
+        );
+    }
+
+    /**
+     * Save a student submission for a single assignment.
+     *
+     * @param int $assignmentid The id of the assignment
+     * @return array of warnings to indicate any errors.
+     * @since Moodle 2.5
+     */
+    public static function save_submission($assignmentid, $plugindata) {
+        global $CFG, $USER;
+        require_once("$CFG->dirroot/mod/assign/locallib.php");
+
+        $params = self::validate_parameters(self::save_submission_parameters(),
+                                            array('assignmentid' => $assignmentid,
+                                                  'plugindata' => $plugindata));
+
+        $cm = get_coursemodule_from_instance('assign', $assignmentid, 0, false, MUST_EXIST);
+        $context = context_module::instance($cm->id);
+
+        $assignment = new assign($context, $cm, null);
+
+        $submissiondata = array();
+
+        // Flatten the submission data.
+        foreach ($plugindata as $pluginsubmission) {
+            $submissiondata = array_merge($submissiondata, $pluginsubmission);
+        }
+        $notices = array();
+
+        $submissiondata = (object)$submissiondata;
+
+        $assignment->save_submission($submissiondata, $notices);
+
+        $warnings = array();
+        foreach ($notices as $notice) {
+            $warnings[] = self::generate_warning($assignmentid,
+                                                 'couldnotsavesubmission',
+                                                 $notice);
+        }
+
+        return $warnings;
+    }
+
+    /**
+     * Describes the return value for save_submission
+     *
+     * @return external_single_structure
+     * @since Moodle 2.5
+     */
+    public static function save_submission_returns() {
+        return new external_multiple_structure(
+           new external_warnings()
+        );
+    }
 }

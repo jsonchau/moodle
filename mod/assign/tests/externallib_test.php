@@ -676,8 +676,48 @@ class mod_assign_external_testcase extends externallib_advanced_testcase {
         // Create a student1 with an online text submission.
         // Simulate a submission.
         $this->setUser($student1);
-        $result = mod_assign_external::prepare_submission($instance->id);
-        var_dump($result);
+
+        // Create a file in a draft area.
+        $draftidfile = file_get_unused_draft_itemid();
+
+        $usercontext = context_user::instance($student1->id);
+        $filerecord = array(
+            'contextid' => $usercontext->id,
+            'component' => 'user',
+            'filearea'  => 'draft',
+            'itemid'    => $draftidfile,
+            'filepath'  => '/',
+            'filename'  => 'testtext.txt',
+        );
+
+        $fs = get_file_storage();
+        $fs->create_file_from_string($filerecord, 'text contents');
+
+        // Create another file in a different draft area.
+        $draftidonlinetext = file_get_unused_draft_itemid();
+
+        $filerecord = array(
+            'contextid' => $usercontext->id,
+            'component' => 'user',
+            'filearea'  => 'draft',
+            'itemid'    => $draftidonlinetext,
+            'filepath'  => '/',
+            'filename'  => 'shouldbeanimage.txt',
+        );
+
+        $fs->create_file_from_string($filerecord, 'image contents (not really)');
+
+        // Now try a submission
+        $filesubmissionparams = array('files_filemanager'=>$draftidfile);
+        $onlinetexteditorparams = array('text'=>'Yeeha!',
+                                        'format'=>1,
+                                        'itemid'=>$draftidonlinetext);
+        $onlinetextsubmissionparams = array('onlinetext_editor' => $onlinetexteditorparams);
+        $submissionpluginparams = array('file'=>$filesubmissionparams,
+                                        'onlinetext'=>$onlinetextsubmissionparams);
+        $result = mod_assign_external::save_submission($instance->id, $submissionpluginparams);
+
+        $this->assertEquals(0, count($result));
 
 
     }

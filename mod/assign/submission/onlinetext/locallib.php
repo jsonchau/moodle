@@ -470,6 +470,19 @@ class assign_submission_onlinetext extends assign_submission_plugin {
         return array(ASSIGNSUBMISSION_ONLINETEXT_FILEAREA=>$this->get_name());
     }
 
+    /**
+     * Return a description of external params suitable for uploading an onlinetext submission from a webservice.
+     *
+     * @return external_description|null
+     */
+    public function get_external_parameters() {
+        $editorparams = array('text' => new external_value(PARAM_TEXT, 'The text for this submission.'),
+                              'format' => new external_value(PARAM_INT, 'The format for this submission'),
+                              'itemid' => new external_value(PARAM_INT, 'The draft area id for files attached to this submission'));
+        $editorstructure = new external_single_structure($editorparams);
+        return new external_single_structure(array('onlinetext_editor' => $editorstructure));
+    }
+
 }
 
 

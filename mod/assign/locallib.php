@@ -4329,6 +4329,7 @@ class assign {
      * @return bool
      */
     protected function process_save_submission(&$mform, &$notices) {
+        global $CFG;
 
         // Include submission form.
         require_once($CFG->dirroot . '/mod/assign/submission_form.php');

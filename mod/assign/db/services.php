@@ -73,14 +73,6 @@ $functions = array(
                 'type' => 'write'
         ),
 
-        'mod_assign_prepare_submission' => array(
-                'classname' => 'mod_assign_external',
-                'methodname' => 'prepare_submission',
-                'classpath' => 'mod/assign/externallib.php',
-                'description' => 'Prepare for a submission upload',
-                'type' => 'write'
-        ),
-    /*
         'mod_assign_save_submission' => array(
                 'classname' => 'mod_assign_external',
                 'methodname' => 'save_submission',
@@ -88,7 +80,6 @@ $functions = array(
                 'description' => 'Update the current students submission',
                 'type' => 'write'
         ),
-    */
 
         'mod_assign_submit_for_grading' => array(
                 'classname' => 'mod_assign_external',
@@ -99,9 +90,9 @@ $functions = array(
         ),
     /*
 
-        'mod_assign_grade_submissions' => array(
+        'mod_assign_save_grade' => array(
                 'classname' => 'mod_assign_external',
-                'methodname' => 'grade_submissions',
+                'methodname' => 'save_grade',
                 'classpath' => 'mod/assign/externallib.php',
                 'description' => 'Save a list of grade updates to submissions',
                 'type' => 'write'
