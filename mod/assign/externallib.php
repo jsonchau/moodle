@@ -41,7 +41,8 @@ class mod_assign_external extends external_api {
             'couldnotgrantextensions'=>'Could not grant submission date extensions.',
             'couldnotrevert'=>'Could not revert submission to draft.',
             'invalidparameters'=>'Invalid parameters.',
-            'couldnotsavesubmission'=>'Could not save submission.'
+            'couldnotsavesubmission'=>'Could not save submission.',
+            'couldnotsavegrade'=>'Could not save grade.'
         );
 
         $message = $warningmessages[$warningcode];
@@ -1090,7 +1091,7 @@ class mod_assign_external extends external_api {
         foreach ($instance->get_submission_plugins() as $plugin) {
             $pluginparams = $plugin->get_external_parameters();
             if (!empty($pluginparams)) {
-                $pluginsubmissionparams[$plugin->get_type()] = $pluginparams;
+                $pluginsubmissionparams = array_merge($pluginsubmissionparams, $pluginparams);
             }
         }
 
@@ -1124,15 +1125,9 @@ class mod_assign_external extends external_api {
 
         $assignment = new assign($context, $cm, null);
 
-        $submissiondata = array();
-
-        // Flatten the submission data.
-        foreach ($plugindata as $pluginsubmission) {
-            $submissiondata = array_merge($submissiondata, $pluginsubmission);
-        }
         $notices = array();
 
-        $submissiondata = (object)$submissiondata;
+        $submissiondata = (object)$plugindata;
 
         $assignment->save_submission($submissiondata, $notices);
 
@@ -1153,6 +1148,93 @@ class mod_assign_external extends external_api {
      * @since Moodle 2.5
      */
     public static function save_submission_returns() {
+        return new external_multiple_structure(
+           new external_warnings()
+        );
+    }
+
+    /**
+     * Describes the parameters for save_grade
+     * @return external_external_function_parameters
+     * @since  Moodle 2.5
+     */
+    public static function save_grade_parameters() {
+        global $CFG;
+        require_once("$CFG->dirroot/mod/assign/locallib.php");
+        $instance = new assign(null, null, null);
+        $pluginfeedbackparams = array();
+
+        foreach ($instance->get_feedback_plugins() as $plugin) {
+            $pluginparams = $plugin->get_external_parameters();
+            if (!empty($pluginparams)) {
+                $pluginfeedbackparams = array_merge($pluginfeedbackparams, $pluginparams);
+            }
+        }
+
+        return new external_function_parameters(
+            array(
+                'assignmentid' => new external_value(PARAM_INT, 'The assignment id to operate on'),
+                'userid' => new external_value(PARAM_INT, 'The student id to operate on'),
+                'grade' => new external_value(PARAM_FLOAT, 'The new grade for this user'),
+                'applytoall' => new external_value(PARAM_BOOL, 'If true, this grade will be applied ' .
+                                                               'to all members ' .
+                                                               'of the group (for group assignments).'),
+                'plugindata' => new external_single_structure(
+                    $pluginfeedbackparams
+                )
+            )
+        );
+    }
+
+    /**
+     * Save a student grade for a single assignment.
+     *
+     * @param int $assignmentid The id of the assignment
+     * @return array of warnings to indicate any errors.
+     * @since Moodle 2.5
+     */
+    public static function save_grade($assignmentid, $userid, $grade, $applytoall, $plugindata) {
+        global $CFG, $USER;
+        require_once("$CFG->dirroot/mod/assign/locallib.php");
+
+        $params = self::validate_parameters(self::save_grade_parameters(),
+                                            array('assignmentid' => $assignmentid,
+                                                  'userid' => $userid,
+                                                  'grade' => $grade,
+                                                  'applytoall' => $applytoall,
+                                                  'plugindata' => $plugindata));
+
+        $cm = get_coursemodule_from_instance('assign', $assignmentid, 0, false, MUST_EXIST);
+        $context = context_module::instance($cm->id);
+
+        $assignment = new assign($context, $cm, null);
+
+        $notices = array();
+
+        $gradedata = (object)$plugindata;
+
+        $gradedata->applytoall = $applytoall;
+        $gradedata->grade = $grade;
+
+        $assignment->save_grade($userid, $gradedata);
+
+        $warnings = array();
+        foreach ($notices as $notice) {
+            $warnings[] = self::generate_warning($assignmentid,
+                                                 'couldnotsavegrade',
+                                                 $notice);
+        }
+
+        return $warnings;
+    }
+
+    /**
+     * Describes the return value for save_grade
+     *
+     * @return external_single_structure
+     * @since Moodle 2.5
+     */
+    public static function save_grade_returns() {
         return new external_multiple_structure(
            new external_warnings()
         );

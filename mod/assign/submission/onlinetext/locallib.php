@@ -480,7 +480,7 @@ class assign_submission_onlinetext extends assign_submission_plugin {
                               'format' => new external_value(PARAM_INT, 'The format for this submission'),
                               'itemid' => new external_value(PARAM_INT, 'The draft area id for files attached to this submission'));
         $editorstructure = new external_single_structure($editorparams);
-        return new external_single_structure(array('onlinetext_editor' => $editorstructure));
+        return array('onlinetext_editor' => $editorstructure);
     }
 
 }

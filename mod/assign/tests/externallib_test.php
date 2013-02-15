@@ -708,17 +708,82 @@ class mod_assign_external_testcase extends externallib_advanced_testcase {
         $fs->create_file_from_string($filerecord, 'image contents (not really)');
 
         // Now try a submission
-        $filesubmissionparams = array('files_filemanager'=>$draftidfile);
+        $submissionpluginparams = array();
+        $submissionpluginparams['files_filemanager'] = $draftidfile;
         $onlinetexteditorparams = array('text'=>'Yeeha!',
                                         'format'=>1,
                                         'itemid'=>$draftidonlinetext);
-        $onlinetextsubmissionparams = array('onlinetext_editor' => $onlinetexteditorparams);
-        $submissionpluginparams = array('file'=>$filesubmissionparams,
-                                        'onlinetext'=>$onlinetextsubmissionparams);
+        $submissionpluginparams['onlinetext_editor'] = $onlinetexteditorparams;
         $result = mod_assign_external::save_submission($instance->id, $submissionpluginparams);
 
         $this->assertEquals(0, count($result));
 
+    }
+
+    /**
+     * Test save_grade
+     */
+    public function test_save_grade() {
+        global $DB, $USER;
+
+        $this->resetAfterTest(true);
+        // Create a course and assignment and users.
+        $course = self::getDataGenerator()->create_course();
+
+        $teacher = self::getDataGenerator()->create_user();
+        $teacherrole = $DB->get_record('role', array('shortname'=>'teacher'));
+        $this->getDataGenerator()->enrol_user($teacher->id,
+                                              $course->id,
+                                              $teacherrole->id);
+        $this->setUser($teacher);
+
+        $generator = $this->getDataGenerator()->get_plugin_generator('mod_assign');
+        $params['course'] = $course->id;
+        $params['assignfeedback_file_enabled'] = 1;
+        $params['assignfeedback_comments_enabled'] = 1;
+        $instance = $generator->create_instance($params);
+        $cm = get_coursemodule_from_instance('assign', $instance->id);
+        $context = context_module::instance($cm->id);
+
+        $assign = new assign($context, $cm, $course);
+
+        $student1 = self::getDataGenerator()->create_user();
+        $student2 = self::getDataGenerator()->create_user();
+        $studentrole = $DB->get_record('role', array('shortname'=>'student'));
+        $this->getDataGenerator()->enrol_user($student1->id,
+                                              $course->id,
+                                              $studentrole->id);
+        $this->getDataGenerator()->enrol_user($student2->id,
+                                              $course->id,
+                                              $studentrole->id);
+        // Simulate a grade.
+        $this->setUser($teacher);
+
+        // Create a file in a draft area.
+        $draftidfile = file_get_unused_draft_itemid();
+
+        $usercontext = context_user::instance($teacher->id);
+        $filerecord = array(
+            'contextid' => $usercontext->id,
+            'component' => 'user',
+            'filearea'  => 'draft',
+            'itemid'    => $draftidfile,
+            'filepath'  => '/',
+            'filename'  => 'testtext.txt',
+        );
+
+        $fs = get_file_storage();
+        $fs->create_file_from_string($filerecord, 'text contents');
+
+        // Now try a grade
+        $feedbackpluginparams = array();
+        $feedbackpluginparams['files_filemanager'] = $draftidfile;
+        $feedbackeditorparams = array('text'=>'Yeeha!',
+                                        'format'=>1);
+        $feedbackpluginparams['assignfeedbackcomments_editor'] = $feedbackeditorparams;
+        $result = mod_assign_external::save_grade($instance->id, $student1->id, 50.0, false, $feedbackpluginparams);
+
+        $this->assertEquals(0, count($result));
 
     }
 }

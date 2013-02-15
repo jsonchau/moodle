@@ -88,17 +88,15 @@ $functions = array(
                 'description' => 'Submit the current students assignment for grading',
                 'type' => 'write'
         ),
-    /*
 
         'mod_assign_save_grade' => array(
                 'classname' => 'mod_assign_external',
                 'methodname' => 'save_grade',
                 'classpath' => 'mod/assign/externallib.php',
-                'description' => 'Save a list of grade updates to submissions',
+                'description' => 'Save a grade update for a single student.',
                 'type' => 'write'
         ),
 
-    */
         'mod_assign_save_user_extensions' => array(
                 'classname' => 'mod_assign_external',
                 'methodname' => 'save_user_extensions',
